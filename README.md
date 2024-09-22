@@ -2,7 +2,7 @@
 
 A very experimental [Finite-state Machine](https://en.wikipedia.org/wiki/Finite-state_machine) simulator.
 
-The [test.am](./test.am) file contains the syntax for describing the FSM.
+The [main.fn](./main.fn) file contains the syntax for describing the FSM.
 The syntax is 
 
 ```lua
