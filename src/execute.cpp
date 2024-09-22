@@ -3,33 +3,42 @@
 #include <string_view>
 #include <unordered_map>
 
+bool apply_rule(Rule rule, std::string_view& input, std::ostream& stream) {
+    if (rule.input != "_" && !input.starts_with(rule.input)) {
+        return false;
+    }
+
+    if (rule.input != "_") {
+        input.remove_prefix(rule.input.size());
+    }
+
+    if (rule.output != "_") {
+        stream << rule.output << "\n";
+    }
+    return true;
+}
+
 bool execute(const FiniteStateMachine& fsm, std::string_view input, std::ostream& stream) {
     Token current = fsm.start;
-    Rule current_rule;
+    Rule current_rule {};
 
     std::cout << "current = " << current.string << "\n";
     while (current != fsm.accept) {
         auto it = fsm.rules.find(current);
         if (it == fsm.rules.end()) {
-            return false;
-        } 
+            it = fsm.rules.find(Token {TokenKind::Underscore, "_"});
+            if (it == fsm.rules.end()) {
+                return false;
+            }
+        }
         current_rule = it->second;
-        
-        if (current_rule.input != "_" && !input.starts_with(current_rule.input)) {
+
+        if (!apply_rule(current_rule, input, stream)) {
             return false;
         }
-
-        if (current_rule.input != "_") {
-            input.remove_prefix(current_rule.input.size());
-        }
-
         current = current_rule.next;
-        std::cout << "current = " << current.string << "\n";
-
-        if (current_rule.output != "_") {
-            stream << current_rule.output << "\n";
-        }
+        // std::cout << "current = " << current.string << "\n";
     }
-    return true;
+    return input.size() == 0;
 }
     
