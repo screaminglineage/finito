@@ -1,0 +1,6 @@
+start := Q0
+accept := Q9
+
+Q0 => "abcd" _ Q4
+Q4 => "efgh" _ Q1
+Q1 => _ _ Q9
