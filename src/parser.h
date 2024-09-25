@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string_view>
 #include <unordered_map>
+#include <vector>
 
 enum class TokenKind {
     None,
@@ -96,7 +97,7 @@ inline std::ostream& operator<<(std::ostream& os, Rule& rule) {
 struct FiniteStateMachine {
     Token start {};
     Token accept {};
-    std::unordered_map<Token, Rule, HashToken> rules {};
+    std::unordered_map<Token, std::vector<Rule>, HashToken> rules {};
 };
 
 class Parser {
@@ -109,7 +110,7 @@ public:
 private:
     Token start {};
     Token accept {};
-    std::unordered_map<Token, Rule, HashToken> rules {};
+    std::unordered_map<Token, std::vector<Rule>, HashToken> rules {};
     Lexer lexer;
     void add_transition(std::array<Token, 5>& tokens);
 };

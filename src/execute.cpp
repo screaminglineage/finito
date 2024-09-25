@@ -18,9 +18,8 @@ bool apply_rule(Rule rule, std::string_view& input, std::ostream& stream) {
 
 bool execute(const FiniteStateMachine& fsm, std::string_view input, std::ostream& stream) {
     Token current = fsm.start;
-    Rule current_rule {};
 
-    std::cout << "current = " << current.string << "\n";
+    // std::cout << "current = " << current.string << "\n";
     while (current != fsm.accept) {
         auto it = fsm.rules.find(current);
         if (it == fsm.rules.end()) {
@@ -29,12 +28,33 @@ bool execute(const FiniteStateMachine& fsm, std::string_view input, std::ostream
                 return false;
             }
         }
-        current_rule = it->second;
-
-        if (!apply_rule(current_rule, input, stream)) {
+        // TODO: if multiple rules match, it continues on with the first of such matches
+        // Could show an error if this case happens, or could support non-determinism
+        bool matched = false;
+        for (const auto& rule: it->second) {
+            if (apply_rule(rule, input, stream)) {
+                current = rule.next;
+                matched = true;
+                break;
+            }
+        }
+        // fallback to _ rule (implicitly declared rules)
+        if (!matched) {
+            it = fsm.rules.find(Token {TokenKind::Underscore, "_"});
+            if (it == fsm.rules.end()) {
+                return false;
+            }
+            for (const auto& rule: it->second) {
+                if (apply_rule(rule, input, stream)) {
+                    current = rule.next;
+                    matched = true;
+                    break;
+                }
+            }
+        }
+        if (!matched) {
             return false;
         }
-        current = current_rule.next;
         // std::cout << "current = " << current.string << "\n";
     }
     return input.size() == 0;

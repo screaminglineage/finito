@@ -126,10 +126,16 @@ bool Lexer::match_many(TokenArray<SIZE>& tokens, TokenKindList to_match) {
 
 
 void Parser::add_transition(std::array<Token, 5>& tokens) {
-    rules.emplace(std::pair(
-        tokens.front(), 
-        Rule{tokens.back(), tokens[2].string, tokens[3].string }
-    ));
+    Rule new_rule { tokens.back(), tokens[2].string, tokens[3].string };
+    auto it = rules.find(tokens.front());
+    if (it == rules.end()) {
+        rules.emplace(std::pair(
+            tokens.front(), 
+            std::vector {new_rule}
+        ));
+    } else {
+        it->second.push_back(new_rule);
+    }
 }
 
 
