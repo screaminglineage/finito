@@ -1,0 +1,10 @@
+start := Qxx
+accept := Qf
+
+Qxx => "1"  "0" Q1x
+Qxx => "0"  "0" Qxx
+
+Q1x => "0"  "1" Qxx
+Q1x => "1"  "0" Q1x 
+
+_   => "x"   _  Qf
