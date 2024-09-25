@@ -1,0 +1,10 @@
+# Accepts strings with an odd number of 0's
+
+start := even0
+accept := odd0
+
+even0 => "0" _ odd0
+odd0 => "0" _ even0
+
+
+
