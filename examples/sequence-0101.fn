@@ -1,3 +1,6 @@
+# Detects the sequence `0101` in the input string
+# Outputs 1 at the point of end of the sequence, 0 otherwise
+
 start := A
 accept := F
 
