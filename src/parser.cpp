@@ -43,14 +43,28 @@ std::string_view Lexer::next_string() {
     return std::string_view {&source[front + 1], end - front - 1};
 }
 
+void Lexer::skip_tokens() {
+    while (isspace(peek())) {
+        next();
+    }
+    
+    if (peek() == '#') {
+        next();
+        while (peek() != '\n') {
+            next();
+        }
+    }
+}
+
 std::pair<Token, bool> Lexer::next_token() {
     Token token {};
     bool success = false;
 
-    while (isspace(peek())) {
-        next();
+    while (peek() == '#' || isspace(peek())) {
+        skip_tokens();
     }
     char ch = peek();
+    
     front = end;
 
     if (std::isalnum(ch)) {
@@ -101,6 +115,7 @@ std::pair<Token, bool> Lexer::match(TokenKind kind) {
 
 template <size_t SIZE>
 bool Lexer::match_many(TokenArray<SIZE>& tokens, TokenKindList to_match) {
+    // save state of lexer to reset if matching fails
     size_t old_front = front;
     size_t old_end = end;
 
@@ -111,6 +126,7 @@ bool Lexer::match_many(TokenArray<SIZE>& tokens, TokenKindList to_match) {
             reset(old_front, old_end);
             return false;
         }
+
         if (next.first.kind == item.first 
             || next.first.kind == item.second) {
             tokens[i++] = next.first;

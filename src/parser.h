@@ -76,6 +76,7 @@ private:
     char peek();
     char next();
 
+    void skip_tokens();
     void reset(size_t old_front, size_t old_end);
     Token next_identifier();
     std::string_view next_string();
