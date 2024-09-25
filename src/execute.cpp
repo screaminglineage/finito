@@ -20,7 +20,7 @@ bool execute(const FiniteStateMachine& fsm, std::string_view input, std::ostream
     Token current = fsm.start;
 
     // std::cout << "current = " << current.string << "\n";
-    while (current != fsm.accept) {
+    while (input.size() > 0) {
         auto it = fsm.rules.find(current);
         if (it == fsm.rules.end()) {
             it = fsm.rules.find(Token {TokenKind::Underscore, "_"});
@@ -57,6 +57,6 @@ bool execute(const FiniteStateMachine& fsm, std::string_view input, std::ostream
         }
         // std::cout << "current = " << current.string << "\n";
     }
-    return input.size() == 0;
+    return current == fsm.accept;
 }
     
