@@ -6,8 +6,8 @@
 #include "execute.h"
 
 int main (int argc, char *argv[]) {   
-    if (argc <= 1) {
-        std::cerr << "No input file(s) provided\n";
+    if (argc <= 2) {
+        std::cerr << "usage: finito <FILE> <INPOT>\n";
         return 1;
     }
     
@@ -24,12 +24,12 @@ int main (int argc, char *argv[]) {
 
     std::cout << "Start State: " << fsm.start.string << "\n";
     std::cout << "Accept State: " << fsm.accept.string << "\n\n";
-    for (auto i: fsm.rules) {
-        std::cout << "Current: " << ((i.first.kind == TokenKind::None)? "_": i.first.string) << "\n";
-        std::cout << i.second << "\n";
-    }
+    // for (auto i: fsm.rules) {
+    //     std::cout << "Current: " << ((i.first.kind == TokenKind::None)? "_": i.first.string) << "\n";
+    //     std::cout << i.second << "\n";
+    // }
 
-    if (execute(fsm, "abcdefgh", std::cout)) {
+    if (execute(fsm, argv[2], std::cout)) {
         std::cout << "Accepted\n";
     } else {
         std::cout << "Not accepted\n";
