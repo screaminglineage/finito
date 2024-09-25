@@ -1,6 +1,6 @@
 start := Q0
 accept := Q9
 
-Q0 => "abcd" "At Q0" Q4
-Q2 => "xfgh" "At Q4" Q9
-_ => "efgh" "At `_`" Q9
+Q0 => "abcdefg" "At Q0" Q2
+Q2 => "a" "At Q4" Q9
+_ => _ "At `_`" Q9

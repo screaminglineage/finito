@@ -8,9 +8,7 @@ bool apply_rule(Rule rule, std::string_view& input, std::ostream& stream) {
         return false;
     }
 
-    if (rule.input != "_") {
-        input.remove_prefix(rule.input.size());
-    }
+    input.remove_prefix(rule.input.size());
 
     if (rule.output != "_") {
         stream << rule.output << "\n";
